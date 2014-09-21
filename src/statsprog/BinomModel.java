@@ -4,19 +4,34 @@ package statsprog;
  *
  * @author Mark
  */
-public class BinomModel { //creates a binomial model
+
+/**
+ * Represents a binomial model with trials trials and prob chance of success
+ */
+public class BinomModel {
 
     private int n;  //number of trials
     private double p;//probability of success
 
-    public BinomModel(int trials, double prob) { //creates a new binomial model with n trials and probability of success p
+    /**
+     * Create a new Binomial model with these parameters
+     * @param trials the number of trials
+     * @param prob the probability of success
+     */
+    public BinomModel(int trials, double prob) {
 
         n = trials;
         p = prob;
 
     }
 
-    public double binompdf(int x) throws Exception { // probability of getting x success in n trials
+    /**
+     * Calculates the probability of getting exactly x successes
+     * @param x the number of success desired
+     * @return the probability
+     * @throws ArithmeticException Overflow
+     */
+    public double binompdf(int x) throws ArithmeticException {
 
         NormalModel nm = new NormalModel(E(),SD());
         
@@ -25,7 +40,8 @@ public class BinomModel { //creates a binomial model
                 System.out.println("Must use Normal Model to estimate binomial probability");
                 return nm.normalpdf(x); //estimate
             } else {
-                throw new Exception("Overflow / No good estimate."); //if conditions are not met, return error
+            	//if conditions are not met
+                throw new ArithmeticException("Overflow / No good estimate."); 
             }
         }
 
@@ -37,7 +53,13 @@ public class BinomModel { //creates a binomial model
 
     }
 
-    public double binomcdf(int x) throws Exception{ // probabilty of getting x success in n trials 
+    /**
+     * Calculates the probability of getting x or fewer successes
+     * @param x the number of successes desired
+     * @return the probability
+     * @throws ArithmeticException Overflow
+     */
+    public double binomcdf(int x) throws ArithmeticException{
 
         NormalModel nm = new NormalModel(E(),SD());
         
@@ -46,7 +68,7 @@ public class BinomModel { //creates a binomial model
                 System.out.println("Must use Normal Model to estimate binomial probability; normal probability will be calculated with 0.001 accuracy");
                 return nm.normalcdf(-9999, x);
             } else {
-                throw new Exception("Overflow / No good estimate.");
+                throw new ArithmeticException("Overflow / No good estimate.");
             }
         }
         
@@ -60,18 +82,31 @@ public class BinomModel { //creates a binomial model
 
     }
 
+    /**
+     * The expected value of the distribution
+     * @return expected value
+     */
     public double E() { //expected value of the model
 
         return n * p;
 
     }
 
+    /**
+     * The std dev of the distribution
+     * @return std dev
+     */
     public double SD() { //SD of the model
 
         return Math.sqrt(n * p * (1 - p));
 
     }
 
+    /**
+     * n!
+     * @param n the number to factorial-ize
+     * @return the factorial
+     */
     public static double factorial(double n) { // returns n!
 
         if (n <= 1) {
@@ -82,6 +117,13 @@ public class BinomModel { //creates a binomial model
 
     }
 
+    /**
+     * n choose k -- the number of combinations of
+     * k objects out of n objects
+     * @param k the number of objects selected
+     * @param n the number of objects total
+     * @return the number of combinations
+     */
     public static double nCk(int k, int n) { //returns n choose k
 
         return factorial(n) / factorial(k) / factorial(n - k);

@@ -14,15 +14,25 @@ public class StudentTModel {
     
     private double df;
     
+    /**
+     * Create a student t model with df degrees of freedom
+     * @param df number of degrees of freedom
+     */
     public StudentTModel(double df){
         
         this.df = df;
         
     }
     
-    public double tpdf (double x){ //tpdf of x on the distribution
-        
-        if(df > 170){ //when df > 170 use the normal model to approximate p
+    /**
+     * Calculate the PDF function for a datum x
+     * @param x the datum
+     * @return the PDF function's value at x
+     */
+    public double tpdf (double x){
+    	
+        //when df > 170 use the normal model to approximate p
+        if(df > 170){ 
             
             NormalModel nm = new NormalModel(0,1);
             
@@ -42,6 +52,12 @@ public class StudentTModel {
         
     }
     
+    /**
+     * Calculate the probability that a datum is between -inf
+     * and bound for the model. 
+     * @param bound the upper bound's t-score
+     * @return the probability
+     */
     public double tcdf (double bound) {
     	
     	if(df > 170){ //when df > 170 use the normal model to approximate p
@@ -66,7 +82,14 @@ public class StudentTModel {
     	
     }
     
-    public double tcdf (double lower, double upper) { //calculates the probability of getting a tscore between upper and lower
+    /**
+     * Calculates the probability that a datum is between
+     * lower and upper for this model.
+     * @param lower the lower bound's t-score
+     * @param upper the upper bound's t-score
+     * @return the probability
+     */
+    public double tcdf (double lower, double upper) {
         
     	if(upper < lower) throw new IllegalArgumentException("upper < lower");
     	
@@ -86,13 +109,26 @@ public class StudentTModel {
         
     }
     
-    public double invT(double area) {//default accuracy
+    /**
+     * Given a probability area, calculates the t-score of the datum.
+     * area is taken as P(X <= x). Uses 0.0000001 as the accuracy.
+     * @param area the probability
+     * @return the t-score
+     */
+    public double invT(double area) {
         
         return invT(area, 0.0000001);
         
     }
     
-    public double invT(double area, double accuracy) {//returns tscore for passed prob/area
+    /**
+     * Given a probability area, calculates the t-score of the datum.
+     * area is taken as P(X <= x).
+     * @param area the probability
+     * @param accuracy the accuracy
+     * @return the t-score
+     */
+    public double invT(double area, double accuracy) {
         
         StudentTModel s = new StudentTModel(df);
         

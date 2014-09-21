@@ -65,6 +65,7 @@ public class NormalModel {
      * @param upper the upper bound
      * @param accuracy the accuracy of the result
      * @return the probability
+     * @throws ArithmeticException see Colt's erfc function
      */
     public double normalcdf(double lower, double upper) throws ArithmeticException {
         

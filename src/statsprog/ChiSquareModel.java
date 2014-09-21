@@ -6,16 +6,29 @@ import cern.jet.stat.Gamma;
  *
  * @author Mark
  */
+
+/**
+ * Represents a x^2 model with df degrees of freedom
+ */
 public class ChiSquareModel { //creates a chi-square model
     
     private double df;
     
+    /**
+     * Creates a x^2 model with df degrees of freedom
+     * @param df the number of degrees of freedom
+     */
     public ChiSquareModel(double df){
         
         this.df = df;
         
     }
     
+    /**
+     * Calculates the value of the PDF function for datum x
+     * @param x the datum
+     * @return the PDF
+     */
     public double chipdf(double x){
         
         double pdf = Math.pow(Math.E, 0 - x / 2);
@@ -30,55 +43,76 @@ public class ChiSquareModel { //creates a chi-square model
         
     }
     
-   public double chicdf (double lower, double upper, double accuracy){ //calculates the probability of getting a tscore between upper and lower
+    /**
+     * Calculates the probability that a datum will be between
+     * lower and upper in this model.
+     * @param lower the lower bound
+     * @param upper the upper bound
+     * @return
+     */
+    public double chicdf (double lower, double upper){
         
-        double sum = chipdf(lower);
-
-        for (double i = lower + accuracy; i < upper; i += accuracy) {
-            sum += 2 * chipdf(i);
-        }
-
-        sum += chipdf(upper);
+    	if(lower < 0)
+    		throw new IllegalArgumentException("chi-square model is not defined for x < 0");
+    	if(upper < lower)
+    		throw new IllegalArgumentException("upper < lower");
+    	
+        double upp = Gamma.incompleteGamma(df / 2.0, upper / 2.0) / Gamma.gamma(df / 2.0);
+        double low = Gamma.incompleteGamma(df / 2.0, lower / 2.0) / Gamma.gamma(df / 2.0);
         
-        if(sum < 1E-6) System.out.println("P < 1E-6; exact digits may not be accurate");
-
-        return sum * accuracy * 0.5;
-        
-    }
-    
-     public double chicdf (double lower, double upper){
-        
-        return chicdf(lower, upper, 1E-5); //default accuracy
+        //by fundamental thm of calc
+        return upp - low;
         
     }
      
+     /**
+      * Calculates the probability that a datum will be between
+      * 0 and upper in this model.
+      * @param upper the upper bound
+      * @return
+      */
      public double chicdf(double upper){
          
          return chicdf(0, upper);
          
      }
 
-     public double invT(double area) {//default accuracy
+     /**
+      * Given a probability, returns the datum y
+      * such that P(0 < X < y) = area. Uses 0.0000001
+      * as the accuracy
+      * @param area the probability
+      * @return the datum y
+      */
+     public double invChi(double area) {//default accuracy
         
-        return invT(area, 0.0000001);
+        return invChi(area, 0.0000001);
         
     }
-    
-    public double invT(double area, double accuracy) {//returns tscore for passed prob/area
+
+     /**
+      * Given a probability, returns the datum y
+      * such that P(0 < X < y) = area.
+      * @param area the probability
+      * @param accuracy the accuracy
+      * @return the datum y
+      */
+    public double invChi(double area, double accuracy) {//returns tscore for passed prob/area
         
-        StudentTModel s = new StudentTModel(df);
+        ChiSquareModel x = new ChiSquareModel(df);
         
-        double x = 0;
-        double tcdf = (area - s.tcdf(-20, x));
-        double tpdf = 0 - s.tpdf(x);
+        double y = 0;
+        double xcdf = (area - x.chicdf(-20, y));
+        double xpdf = 0 - x.chipdf(y);
         
-        while(Math.abs(tcdf) > accuracy){
-            x -= tcdf / tpdf;
-            tcdf = (area - s.tcdf(-20, x));
-            tpdf = 0 - s.tpdf(x);
+        // Using Newton's method
+        while(Math.abs(xcdf) > accuracy){
+            y -= xcdf / xpdf;
+            xcdf = (area - x.chicdf(-20, y));
+            xpdf = 0 - x.chipdf(y);
         }
         
-        return x;
+        return y;
         
     }
     
