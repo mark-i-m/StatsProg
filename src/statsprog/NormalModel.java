@@ -1,5 +1,7 @@
 package statsprog;
 
+import cern.jet.stat.Probability;
+
 /**
  *
  * @author Mark
@@ -53,20 +55,6 @@ public class NormalModel {
         return ret;
 
     }
-
-    /**
-     * Calculate the probability that a datum is between
-     * lower and upper in this model. Uses 0.000001 as the
-     * accuracy.
-     * @param lower the lower bound
-     * @param upper the upper bound
-     * @return the probability
-     */
-    public double normalcdf(double lower, double upper) { 
-
-        return normalcdf(lower, upper, 0.000001);
-
-    }
     
     /**
      * Calculate the probability that a datum is between
@@ -76,19 +64,16 @@ public class NormalModel {
      * @param accuracy the accuracy of the result
      * @return the probability
      */
-    public double normalcdf(double lower, double upper, double accuracy){
+    public double normalcdf(double lower, double upper) throws ArithmeticException {
         
-        double sum = normalpdf(lower);
+        if(upper < lower) throw IllegalArgumentException("upper <= lower");
 
-        for (double i = lower + accuracy; i < upper; i += accuracy) {
-            sum += 2 * normalpdf(i);
-        }
+        // P(X <= upper)
+        double upp = 0.5 * Probability.errorFunctionComplemented((mean - upper)/(Math.sqrt(2) * sd));
+        double low = 0.5 * Probability.errorFunctionComplemented((mean - lower)/(Math.sqrt(2) * sd));
 
-        sum += normalpdf(upper);
-        
-        if(sum < 1E-6) System.out.println("P < 1E-6; exact digits may not be accurate");
-
-        return sum * accuracy * 0.5;
+        // using fundamental thm of calc
+        return upp - low;
         
     }
     
@@ -101,7 +86,7 @@ public class NormalModel {
      */
     public double invNorm(double area) {
         
-        return invNorm(area, 0.00001);
+        return invNorm(area, 0.0000001);
         
     }
     
@@ -112,7 +97,7 @@ public class NormalModel {
      * @param accuracy the accuracy
      * @return the datum x
      */
-    public double invNorm(double area, double accuracy) {
+    public double invNorm(double area, double accuracy) throws ArithmeticException {
         
         NormalModel n = new NormalModel(0,1);
         
