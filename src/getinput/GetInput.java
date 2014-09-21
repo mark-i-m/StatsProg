@@ -18,7 +18,8 @@
  */
 package getinput;
 
-import java.util.*;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class GetInput {
 

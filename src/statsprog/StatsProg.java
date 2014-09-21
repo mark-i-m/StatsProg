@@ -1,8 +1,8 @@
 package statsprog;
 
 import getinput.GetInput;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class StatsProg {
 

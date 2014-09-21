@@ -1,7 +1,8 @@
 
 package formatdecimal2;
 
-import java.text.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class FormatDecimal2 {
     
