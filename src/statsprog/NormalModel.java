@@ -5,7 +5,9 @@ import cern.jet.stat.Probability;
 /**
  *
  * @author Mark
- * 
+ */
+
+/**
  * Represents a normal model with mean=m std dev=s
  */
 public class NormalModel {
@@ -66,7 +68,7 @@ public class NormalModel {
      */
     public double normalcdf(double lower, double upper) throws ArithmeticException {
         
-        if(upper < lower) throw IllegalArgumentException("upper <= lower");
+        if(upper < lower) throw new IllegalArgumentException("upper < lower");
 
         // P(X <= upper)
         double upp = 0.5 * Probability.errorFunctionComplemented((mean - upper)/(Math.sqrt(2) * sd));

@@ -1,8 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
+
+import cern.jet.stat.Gamma;
 
 /**
  *
@@ -26,7 +24,7 @@ public class ChiSquareModel { //creates a chi-square model
         
         pdf /= Math.pow(2, df / 2);
         
-        pdf /= StudentTModel.gamma(df / 2);
+        pdf /= Gamma.gamma(df / 2);
         
         return pdf;
         

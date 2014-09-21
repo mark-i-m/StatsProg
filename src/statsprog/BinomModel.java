@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
@@ -48,7 +44,7 @@ public class BinomModel { //creates a binomial model
         if (n > 70 || x > 70) {
             if (n * p >= 10 && n * (1 - p) >= 10) {
                 System.out.println("Must use Normal Model to estimate binomial probability; normal probability will be calculated with 0.001 accuracy");
-                return nm.normalcdf(-9999, x, 0.001);
+                return nm.normalcdf(-9999, x);
             } else {
                 throw new Exception("Overflow / No good estimate.");
             }

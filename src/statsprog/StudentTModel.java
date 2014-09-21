@@ -1,16 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
+
+import cern.jet.stat.Gamma;
 
 /**
  *
  * @author Mark
  */
 
-
-public class StudentTModel { //creates a t-model
+/**
+ * Models a Student t model with df degrees of freedom
+ */
+public class StudentTModel {
     
     private double df;
     
@@ -30,11 +30,11 @@ public class StudentTModel { //creates a t-model
             
         }
         
-        double t = gamma(0.5 * (df + 1));
+        double t = Gamma.gamma(0.5 * (df + 1));
         
         t = t / Math.sqrt(df * Math.PI);
         
-        t = t / gamma((double) df / 2);
+        t = t / Gamma.gamma((double) df / 2);
         
         t = t / Math.pow(1 + Math.pow(x, 2) / df, (double)(df + 1) / 2);
         
@@ -42,58 +42,47 @@ public class StudentTModel { //creates a t-model
         
     }
     
-    public double tcdf (double lower, double upper, double accuracy){ //calculates the probability of getting a tscore between upper and lower
+    public double tcdf (double bound) {
+    	
+    	if(df > 170){ //when df > 170 use the normal model to approximate p
+            
+            NormalModel nm = new NormalModel(0,1);
+            
+            return nm.normalcdf(-9999, bound);
+            
+        }
+    	
+    	if(bound <= 0) {
+    		
+    		return 0.5 * Gamma.incompleteBeta(df / (bound * bound + df), df / 2.0, 0.5)
+    					/ Gamma.beta(df / 2.0, 0.5);
+    		
+    	} else {
+    		
+    		return 0.5 * ((Gamma.incompleteBeta(bound * bound / (bound * bound + df), 0.5, df / 2.0)
+					/ Gamma.beta(0.5, df / 2.0)) + 1);
+    		
+    	}
+    	
+    }
+    
+    public double tcdf (double lower, double upper) { //calculates the probability of getting a tscore between upper and lower
         
+    	if(upper < lower) throw new IllegalArgumentException("upper < lower");
+    	
         if(df > 170){ //when df > 170 use the normal model to approximate p
             
             NormalModel nm = new NormalModel(0,1);
             
-            return nm.normalcdf(lower, upper, accuracy);
+            return nm.normalcdf(lower, upper);
             
         }
         
-        double sum = tpdf(lower);
-
-        for (double i = lower + accuracy; i < upper; i += accuracy) {
-            sum += 2 * tpdf(i);
-        }
-
-        sum += tpdf(upper);
+        // by fund thm of calc
+        double upp = tcdf(upper);
+        double low = tcdf(lower);
         
-        if(sum < 1E-6) System.out.println("P < 1E-6; exact digits may not be accurate");
-
-        return sum * accuracy * 0.5;
-        
-    }
-    
-    public double tcdf (double lower, double upper){
-        
-        return tcdf(lower, upper, 1E-5); //default accuracy
-        
-    }
-    
-    public static double gamma(double z){ //gamma(x) - used in t model
-        
-        //if z is a whole number, use (z-1)!
-        if(z % 1 == 0 && z < 171)
-            return BinomModel.factorial(z - 1);
-        
-        //otherwise, use approximation
-        /*
-         * This uses the Lanscoz Approximation of the Gamma function
-         * This implementation is from Robert Sedgewick and Kevin Wayne
-         * at Princeton University: (c) 2000 - 2011
-         */
-        
-        double tmp = (z - 0.5) * Math.log(z + 4.5) - (z + 4.5);
-        double ser = 1.0 + 76.18009173 /  z
-                         - 86.50532033 / (z + 1)
-                         + 24.01409822 / (z + 2)
-                         - 1.231739516 / (z + 3)
-                         + 0.00120858003 / (z + 4)
-                         - 0.00000536382 / (z - 5);
-        
-        return Math.exp(tmp + Math.log(ser * Math.sqrt(2 * Math.PI)));
+        return upp - low;
         
     }
     
@@ -111,6 +100,7 @@ public class StudentTModel { //creates a t-model
         double tcdf = (area - s.tcdf(-10, x));
         double tpdf = 0 - s.tpdf(x);
         
+        // using Newton's method
         while(Math.abs(tcdf) > accuracy){
             x -= tcdf / tpdf;
             tcdf = (area - s.tcdf(-10, x));
