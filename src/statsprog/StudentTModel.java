@@ -25,6 +25,13 @@ public class StudentTModel {
     }
     
     /**
+     * Represent options for alternate hypotheses for t-tests
+     */
+    public enum AlternateHypothesis {
+    	MLESS, MNOTEQ, MGREATER;
+    }
+    
+    /**
      * Calculate the PDF function for a datum x
      * @param x the datum
      * @return the PDF function's value at x

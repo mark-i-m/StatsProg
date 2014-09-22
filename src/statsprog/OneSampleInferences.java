@@ -1,28 +1,46 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
  *
  * @author Mark
  */
-public class OneSampleInferences extends OneSampleDistribution {//inferences from one sample mean t-model
+
+/**
+ * Represents a distribution using the student t model,
+ * for running tests
+ */
+public class OneSampleInferences extends OneSampleDistribution {
     
+	/**
+	 * Creates a new distribution with these parameters
+	 * @param n the sample size
+	 * @param sd the data std dev
+	 * @param xbar the sample mean
+	 */
     public OneSampleInferences(int n, double sd, double xbar){
         
         super(n,sd,xbar);
         
     }
     
+    /**
+     * Create the sampling distribution from a sample
+     */
     public OneSampleInferences(Sample s){
         
         super(s);
         
     }
     
-    public double[] oneSampTInt (double cl){//create a 1-samp t interval with confidence level cl
+    /**
+     * Calculate the one-sample t-interval with 
+     * confidence level cl
+     * @param cl the confidence level
+     * @return the lower and upper bounds of the
+     * interval, respectively, in a two-element
+     * array 
+     */
+    public double[] oneSampTInt (double cl){
         
         StudentTModel s = new StudentTModel(n - 1);
         
@@ -36,25 +54,31 @@ public class OneSampleInferences extends OneSampleDistribution {//inferences fro
         
     }
     
-    public double oneSampTTest (double munaught, int altH){//runs a 1-samp t test using munaught for the null hypothesis; altH defines the alternate h.
+    /**
+     * Calculates the p-value resulting from the hypothesis test
+     * @param munaught the hypothesis
+     * @param altH the alternate hypothesis; one of the values
+     * of the AlternateHypothesis enum
+     * @return the p-value
+     */
+    public double oneSampTTest (double munaught, StudentTModel.AlternateHypothesis altH){
         
         StudentTModel s = new StudentTModel(n - 1);
         
         double t = (mean - munaught) / se;
         
         switch(altH){
-            case 0: //p != pnaught
+            case MNOTEQ: //p != pnaught
                 return 2 * s.tcdf((t < 0) ? -10 : t, (t < 0) ? t : 10);
                 
-            case 1: //p < pnaught
+            case MLESS: //p < pnaught
                 return s.tcdf(-9, t);
                 
-            case 2: //p > pnaught
+            case MGREATER: //p > pnaught
                 return s.tcdf(t, 9);
-                
-            default: //impossible; used for coding purposes
-                return 0;
         }
+        
+        throw new IllegalArgumentException("altH invalid");
         
     }
     

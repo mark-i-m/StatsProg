@@ -1,32 +1,47 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
  *
  * @author Mark
  */
-public class OnePropInferences extends OnePropDistribution { // creates a sampling dist for inferences using phat and sample size n
+
+/**
+ * Creates a sampling distribution for inferences using p_hat
+ * and sample size n 
+ */
+public class OnePropInferences extends OnePropDistribution {
     
-    public OnePropInferences(double phat, int n){ // sd variable will contain the se
-        
-        super(phat, n);
-        
+	/**
+	 * Create a distribution for inferences
+	 * @param p_hat the sample mean 
+	 * @param n the sample size
+	 */
+    public OnePropInferences(double p_hat, int n){
+    	// sd variable will contain the se
+        super(p_hat, n);
     }
     
+    /**
+     * Create a distribution for the sample
+     * @param s
+     */
     public OnePropInferences(Sample s){
-        
         super(s);
-        
     }
     
-    public double[] onePropZInt (double cl){// creates a 1-prop z interval with confidence level cl 
+    /**
+     * Calculates a confidence interval of confidence level cl
+     * for this distribution 
+     * @param cl the confidence level
+     * @return the confidence level -- an array of size 2,
+     * the first element will be the lower bound of the interval
+     * and the second element will be the upper bound
+     */
+    public double[] onePropZInt (double cl){
         
         NormalModel nm = new NormalModel(0,1);
         
-        double zstar = nm.invNorm(cl + (1. - cl) / 2);
+        double zstar = nm.invNorm(cl + (1.0 - cl) / 2);
         
         double[] CI = new double[2];
         CI[0] = p - zstar * se;
@@ -36,25 +51,35 @@ public class OnePropInferences extends OnePropDistribution { // creates a sampli
         
     }
     
-    public double onePropZTest (double pnaught, int altH){ //runs a 1-prop z-test using pnaught for the null hyp.; altH defines the alternate hyp.
+    /**
+     * Calculates the p-value resulting from a one-proportion z-test
+     * with hypothesis p = pnaught, and alternate hypothesis altH.
+     * altH == PLESS indicates that the alternate hypothesis is
+     * 		p < p_o
+     * altH == PNOTEQ indicates p != p_o
+     * altH == PGREATER indicates p > p_o
+     * @param pnaught the hypothesis
+     * @param altH the alternate hypothesis
+     * @return the p-value
+     */
+    public double onePropZTest (double pnaught, NormalModel.AlternateHypothesis altH){
         
         NormalModel nm = new NormalModel(0,1);
         
         double z = (p - pnaught) / Math.sqrt(pnaught * (1- pnaught) / n);
         
         switch(altH){
-            case 0: // p != pnaught
+            case PNOTEQ: // p != pnaught
                 return 2 * nm.normalcdf((z < 0) ? -10 : z, (z < 0) ? z : 10);
          
-            case 1: // p < pnaught
+            case PLESS: // p < pnaught
                 return nm.normalcdf(-9, z);
             
-            case 2: // p > pnaught
-                return nm.normalcdf(z, 9);
-            
-            default: //impossible; used for coding purposes
-                return 0;    
+            case PGREATER: // p > pnaught
+                return nm.normalcdf(z, 9);   
         }
+        
+        throw new IllegalArgumentException("altH invalid");
         
     }
     

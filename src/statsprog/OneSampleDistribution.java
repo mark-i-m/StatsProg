@@ -1,21 +1,28 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
  *
  * @author Mark
  */
-public class OneSampleDistribution { //creates a sampling distribution
+
+/**
+ * Create a sampling distribution with a Student t test
+ */
+public class OneSampleDistribution {
     
-    public int n;//sample size
-    public double sd;//sd of data
-    public double se;//se of pop from data
-    public double mean;//mean of data
+    public int n;		//sample size
+    public double sd;	//sd of data
+    public double se;	//se of pop from data
+    public double mean;	//mean of data
     
-    public OneSampleDistribution(int n, double sd, double xbar){ //creates a sampling distribution from the sample stats passed
+    /**
+     * Creates a sampling distribution from these sample
+     * statistics:
+     * @param n the sample size
+     * @param sd the sample std dev
+     * @param xbar the sample mean
+     */
+    public OneSampleDistribution(int n, double sd, double xbar){
         
         this.n = n;
         this.sd = sd;
@@ -24,28 +31,49 @@ public class OneSampleDistribution { //creates a sampling distribution
         
     }
     
-    public OneSampleDistribution(Sample s){ //creates a sampling distribution from sample
+    /**
+     * Create a sampling distribution from the sample
+     * @param s the sample
+     */
+    public OneSampleDistribution(Sample s){
         
         this.n = s.n();
-        this.sd = Math.sqrt(s.var() * n / (n - 1));
-        this.mean = s.mean();
+        this.sd = Math.sqrt(DataStats.var(s.toArray()) * n / (n - 1));
+        this.mean = DataStats.mean(s.toArray());
         this.se = SE(sd,n);
         
     }
     
-    public static double SE(double sd, int n){//sd = sd of data, n = sample size, returns the pop SE from data
+    /**
+     * Calculate the std error of the population from the
+     * data statistics
+     * @param sd the std dev of the data
+     * @param n the sample size
+     * @return the population SE
+     */
+    public static double SE(double sd, int n){
         
         return sd / Math.sqrt(n);
         
     }
     
-    public double tscore (double xbar){//calculates tscore of xbar
+    /**
+     * Calculates the t-score of the xbar in this distribution
+     * @param xbar the datum
+     * @return the t-score
+     */
+    public double tscore (double xbar){
         
         return (xbar - mean) / se;
         
     }
     
-    public double tpdf (double xbar){ //calculates the tpdf of xbar in the sampling distribution
+    /**
+     * Calculate the PDF of xbar in this sampling distribution
+     * @param xbar the datum
+     * @return the PDF
+     */
+    public double tpdf (double xbar){
         
         StudentTModel s = new StudentTModel(n - 1);
         
@@ -53,7 +81,14 @@ public class OneSampleDistribution { //creates a sampling distribution
         
     }
     
-    public double tcdf (double lower, double upper){ //calculates the probability of getting a sample with xbar between upper and lower in the sampling distribution
+    /**
+     * Calculate the probability of a datum being between
+     * lower and upper in this sampling distribution
+     * @param lower the lower bound
+     * @param upper the upper bound
+     * @return the probability
+     */
+    public double tcdf (double lower, double upper){
         
         StudentTModel s = new StudentTModel(n - 1);
         

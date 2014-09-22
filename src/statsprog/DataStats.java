@@ -126,12 +126,9 @@ public class DataStats {
      */
     public static double q1(double[] data) {
 
-        int med;
         double[] ldata;
 
         if (data.length % 2 != 0) {
-
-            med = (data.length - 1) / 2;
 
             ldata = new double[(data.length + 1) / 2];
 
@@ -142,8 +139,6 @@ public class DataStats {
             return median(ldata);
 
         } else {
-
-            med = (data.length - 2) / 2;
 
             ldata = new double[data.length / 2];
 

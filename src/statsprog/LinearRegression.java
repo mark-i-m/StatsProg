@@ -36,8 +36,8 @@ public class LinearRegression {
     
     private static Sample generateZScores(Sample s){
         
-        double mean = s.mean();
-        double sd = Math.sqrt(s.var() * s.n() / (s.n() - 1));
+        double mean = DataStats.mean(s.toArray());
+        double sd = Math.sqrt(DataStats.var(s.toArray()) * s.n() / (s.n() - 1));
         Sample sret = new Sample();
         
         for(int i = 0; i < s.n(); i++)
@@ -70,7 +70,8 @@ public class LinearRegression {
         
         if(b1 != 0) return b1;
         
-        return r * (Math.sqrt(y.var() * y.n() / (y.n() - 1))) / (Math.sqrt(x.var() * x.n() / (x.n() - 1)));
+        return r * (Math.sqrt(DataStats.var(y.toArray()) * y.n() / (y.n() - 1)))
+        		 / (Math.sqrt(DataStats.var(x.toArray()) * x.n() / (x.n() - 1)));
         
     }
     
@@ -78,7 +79,7 @@ public class LinearRegression {
         
         if(b0 != 0) return b0;
         
-        return y.mean() - b1 * x.mean();
+        return DataStats.mean(y.toArray()) - b1 * DataStats.mean(x.toArray());
         
     }
     

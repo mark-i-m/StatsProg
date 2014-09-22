@@ -37,6 +37,11 @@ public class Sample {
         
     }
     
+    public Sample () {
+    	this.s = new double[1];
+    	this.n = 0;
+    }
+    
     /**
      * Add a datum to the sample
      * @param value the datum
@@ -77,6 +82,22 @@ public class Sample {
     	
         return s[i];
         
+    }
+    
+    /**
+     * Get an array of the data
+     * @return the data
+     */
+    public double[] toArray(){
+    	
+    	double data[] = new double[n];
+    	
+    	for(int i = 0; i < n; i++){
+    		data[i] = s[i];
+    	}
+    	
+    	return data;
+    	
     }
     
     /**

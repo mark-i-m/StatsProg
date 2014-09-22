@@ -34,9 +34,16 @@ public class NormalModel {
      */
     public NormalModel(Sample s){
         
-        mean = s.mean();
-        sd = s.sd();
+        mean = DataStats.mean(s.toArray());
+        sd = DataStats.sd(s.toArray());
         
+    }
+    
+    /**
+     * An enumeration of the types of alternate hypotheses
+     */
+    public enum AlternateHypothesis {
+    	PLESS, PNOTEQ, PGREATER;
     }
     
     /**

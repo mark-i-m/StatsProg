@@ -10,11 +10,6 @@ public class StatsProg {
         
         System.out.println("Normal and Student T probabilities are not accurate past the fifth decimal digit"); //Warning
         
-        double [][] data = new double[][]
-        {
-            {23,20,18,23,20,19,18,21,19,22,24,29}
-        };
-        
         double [][] data1 = new double[][]
         {
             {320,245,288},
