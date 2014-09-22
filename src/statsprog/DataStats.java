@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
@@ -10,11 +6,17 @@ package statsprog;
  */
 import java.util.ArrayList;
 
+/**
+ * Contains static methods for general statistical calculations
+ */
 public class DataStats {
-    //this class contains methods for general calculations
     
-
-    public static double[] arrlisttoarr(ArrayList<Double> data) {   // puts the data in the arraylist into an array
+	/**
+	 * Converts an arraylist of doubles to an array.
+	 * @param data the arraylist
+	 * @return the array
+	 */
+    public static double[] arrlisttoarr(ArrayList<Double> data) {
 
         double[] dataa = new double[data.size()];
 
@@ -26,7 +28,12 @@ public class DataStats {
 
     }
 
-    public static double median(double[] data) {  // returns the median of the data in the parameter array
+    /**
+     * Calculates the median of the data.
+     * @param data the data array
+     * @return the median
+     */
+    public static double median(double[] data) {
 
         if (data.length % 2 != 0) {
             return data[(data.length - 1) / 2];
@@ -41,13 +48,23 @@ public class DataStats {
 
     }
 
-    public static double mean(double[] data)  { //returns the mean of the data in the parameter array
+    /**
+     * Calculates the arithmetic mean of the data
+     * @param data the data array
+     * @return the mean
+     */
+    public static double mean(double[] data)  {
 
         return sum(data) / data.length;
 
     }
 
-    public static double sum(double[] data) { //returns the sum of the data in the parameter array
+    /**
+     * Calculates the sum of the data
+     * @param data the data array
+     * @return the sum
+     */
+    public static double sum(double[] data) {
 
         double sum = 0;
 
@@ -59,14 +76,23 @@ public class DataStats {
 
     }
 
-    public static double sd(double[] data){ //returns the SD of the data in the parameter; calculates pop SD, to get df degrees of freedom, use Math.sqrt(var() * n / (n - 1))
-        //this is a private/helper method
+    /**
+     * Calculates the std dev of the data
+     * @param data the data array
+     * @return the std dev
+     */
+    public static double sd(double[] data){
         
         return Math.sqrt(var(data));
 
     }
 
-    public static double var(double[] data) { //returns the variance of the data passed with denom passed, similar to the standardDeviation method; also a helper method
+    /**
+     * Calculates the variance of the data
+     * @param data the data array
+     * @return the variance
+     */
+    public static double var(double[] data) {
 
         double[] deviations = new double[data.length];
 
@@ -80,13 +106,25 @@ public class DataStats {
 
     }
 
-    public static double deviation(double datum, double[] data) { // returns the deviation of the datum passed from the mean of the data passed
+    /**
+     * Calculates the deviation of a datum from the mean
+     * of the data
+     * @param datum the datum
+     * @param data the data array
+     * @return the deviation
+     */
+    public static double deviation(double datum, double[] data) {
 
         return datum - mean(data);
 
     }
 
-    public static double q1(double[] data) { // returns the first quartile of data passed
+    /**
+     * Calculates the first quartile of the data
+     * @param data the data array
+     * @return the first quartile
+     */
+    public static double q1(double[] data) {
 
         int med;
         double[] ldata;
@@ -119,7 +157,12 @@ public class DataStats {
 
     }
 
-    public static double q3(double[] data) { // returns third quartile of data passed
+    /**
+     * Calculates the third quartile of the data
+     * @param data the data array
+     * @return the third quartile
+     */
+    public static double q3(double[] data) {
 
         int med;
         double[] udata;
@@ -152,13 +195,23 @@ public class DataStats {
 
     }
 
-    public static double iqr(double[] data) { // returns the iqr of the data
-
+    /**
+     * Calculates the interquartile range of the data
+     * @param data the data array
+     * @return the IQR
+     */
+    public static double iqr(double[] data) {
+    	
         return q3(data) - q1(data);
 
     }
 
-    public static double max(double[] data) { // returns max of the data
+    /**
+     * Finds the maximum of the data
+     * @param data the data array
+     * @return the maximum
+     */
+    public static double max(double[] data) {
 
         double max = data[0];
 
@@ -172,7 +225,12 @@ public class DataStats {
 
     }
 
-    public static double min(double[] data){ // returns min of the data
+    /**
+     * Finds the minimum of the data
+     * @param data the data array
+     * @return the minimum
+     */
+    public static double min(double[] data){
 
         double min = data[0];
 
@@ -186,13 +244,25 @@ public class DataStats {
 
     }
 
-    public static double range(double[] data) { // returns the range of the data
+    /**
+     * Calculates the range of the data
+     * @param data the data array
+     * @return the range
+     */
+    public static double range(double[] data) {
 
         return max(data) - min(data);
 
     }
 
-    public static double[] highOutliers(double[] data){ // returns the high outliers of the data
+    /**
+     * Returns a list of high outliers. High outliers
+     * are those at least 1.5*IQR above the third
+     * quartile.
+     * @param data the data array
+     * @return the list of high outliers
+     */
+    public static double[] highOutliers(double[] data){
 
         double iqr = iqr(data);
         double q3 = q3(data);
@@ -208,7 +278,14 @@ public class DataStats {
 
     }
 
-    public static double[] lowOutliers(double[] data) { //returns the low outliers of the data
+    /**
+     * Returns a list of low outliers. Low outliers
+     * are those at least 1.5*IQR below the first
+     * quartile.
+     * @param data the data array
+     * @return the list of low outliers
+     */
+    public static double[] lowOutliers(double[] data) {
 
         double iqr = iqr(data);
         double q1 = q1(data);

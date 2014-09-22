@@ -1,48 +1,66 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
  *
  * @author Mark
  */
-public class GeometModel { // creates a gemotric model
+
+/*
+ * Represents a geometric distribution with probability of success prob
+ */
+public class GeometModel {
     
     private double p;   // probability of success
 
-    public GeometModel(double prob) {   //creates a geometric model with probability of success p
+    /**
+     * Create a geometric model with probability of success prob
+     * @param prob the probability of success
+     */
+    public GeometModel(double prob) {
 
         p = prob;
 
     }
 
-    public double geompdf(int n) { // returns the probability of getting first success on nth trial
+    /**
+     * Calculates the probability of getting the first success
+     * on the n-th trial.
+     * @param n the trial number
+     * @return the probability
+     */
+    public double geompdf(int n) {
 
         return Math.pow(1 - p, n - 1) * p;
 
     }
 
-    public double geomcdf(int n) { //returns the probability of getting first success on nth trial or earlier
+    /**
+     * Calculates the probability of success on or before the n-th
+     * trial.
+     * @param n the number of trials
+     * @return the probability
+     */
+    public double geomcdf(int n) {
 
-        double sum = 0;
-
-        for (int i = 1; i <= n; i++) {
-            sum += geompdf(i);
-        }
-
-        return sum;
+        return 1 - Math.pow(1-p, n);
 
     }
     
-    public double E(){ //returns the expected value of the model
-        
+    /**
+     * Calculates expected value of this model 
+     * @return the expected value
+     */
+    public double E(){
+ 
         return 1 / p;
         
     }
     
-    public double SD(){//returns the SD of the model
+    /**
+     * Calculates the std dev of this model
+     * @return the std dev
+     */
+    public double SD(){
         
         return Math.sqrt(p / (1 - p) / (1 - p));
     }

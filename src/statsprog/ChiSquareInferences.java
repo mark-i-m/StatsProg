@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
@@ -10,11 +6,19 @@ package statsprog;
  */
 import java.util.Arrays;
 
+/**
+ * Represents chi-square inference tests, storing
+ * data and chi-square inference information
+ */
 public class ChiSquareInferences {
     
     private double[][] data;//data
     private double[][] x_sq;//chi-sq for each cell
     
+    /**
+     * Create a new chi-square inference object with the data
+     * @param data a table of data
+     */
     public ChiSquareInferences(double[][] data){
         
         this.data = data;
@@ -22,18 +26,30 @@ public class ChiSquareInferences {
         
     }
     
-    public double GOFTest(){//are all the categories equally distributed
+    /**
+     * Chi-square goodness-of-fit test. Tests the hypothesis that
+     * all categories are equally distributed.
+     * @return the p-value
+     */
+    public double GOFTest(){
         
         double[] model = new double[data[0].length];
         
         for(int i = 0; i < model.length; i++)
             model[i] = 1.0 / model.length;
         
-        return GOFTest(model);//passes a null model in which all categories are equally distributed
+        //passes a null model in which all categories are equally distributed
+        return GOFTest(model);
         
     }
     
-    public double GOFTest(double[] model){//see how well this model fits; model is proportions for categories
+    /**
+     * Tests the hypothesis that model fits the data
+     * @param model the model. The model consists of the proportions
+     * for the categories
+     * @return the p-value
+     */
+    public double GOFTest(double[] model){
         
         double[] exp = new double[data[0].length];
         double chi_sq = 0;
@@ -55,6 +71,10 @@ public class ChiSquareInferences {
         
     }
     
+    /**
+     * Tests the hypothesis that the categories are independent.
+     * @return the p-value
+     */
     public double Hom_IndTest(){
         
         double[][] exp = new double[data.length][data[0].length];
@@ -65,7 +85,8 @@ public class ChiSquareInferences {
         double[] colTotals = new double[data[0].length];
         double total = 0;
         
-        for(int r = 0; r < data.length; r++){//calculates marginal distribution
+        //calculates marginal distribution
+        for(int r = 0; r < data.length; r++){
             
             double sum = 0;
             
@@ -76,8 +97,9 @@ public class ChiSquareInferences {
             total += sum;                   //also calculates total
             
         }
-        
-        for(int c = 0; c < data[0].length; c++){//calculates other marginal distribution
+      
+        //calculates other marginal distribution
+        for(int c = 0; c < data[0].length; c++){
             
             double sum = 0;
             
@@ -101,12 +123,19 @@ public class ChiSquareInferences {
         
     }
     
+    /**
+     * Return the matrix of chi-square values
+     * @return the matrix
+     */
     public double[][] getX_Sq(){
         
         return x_sq;
         
     }
     
+    /**
+     * Returns a string representation of this inference test object
+     */
     public String toString(){
         
         String s = "";
