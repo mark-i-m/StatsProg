@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
@@ -11,151 +7,87 @@ package statsprog;
 
 import java.util.ArrayList;
 
+/*
+ * Represents a sample of data
+ */
 public class Sample {
     
-    private ArrayList<Double> s = null;
-    private double[] sarr = null;
+    private double[] s = null; // the data
+    private int n = 0; // the sample size
     
-    public Sample (){
+    /**
+     * Create a Sample from the data in s
+     * @param s the list of data
+     */
+    public Sample (ArrayList<Double> s){
         
-        s = new ArrayList<Double>();
-        sarr = arrlisttoarr(s);
+        this.s = DataStats.arrlisttoarr(s);
+        n = s.size();
         
     }
     
-    public Sample (double [] d){
+    /**
+     * Create a Sample from the data in s
+     * @param s the list of data
+     */
+    public Sample (double [] s){
         
-        s = new ArrayList<Double>();
-        
-        for(double db : d)
-            s.add(db);
-        
-        sarr = arrlisttoarr(s);
+        this.s = s;
+        n = s.length;
         
     }
     
+    /**
+     * Add a datum to the sample
+     * @param value the datum
+     */
     public void add(Double value){
         
-        s.add(value);
+    	double newarr[] = new double[s.length * 2];
+    	
+        for(int i = 0; i < s.length; i++)
+        	newarr[i] = s[i];
+           
+        newarr[s.length] = value;
         
-        sarr = arrlisttoarr(s);
-        
-    }
-    
-    public static double[] arrlisttoarr(ArrayList<Double> data) {   // puts the data in the arraylist into an array
-
-        double[] dataa = new double[data.size()];
-
-        for (int i = 0; i < data.size(); i++) {
-            dataa[i] = data.get(i);
-        }
-
-        return dataa;
-
-    }
-    
-    public double median() { //returns the median of data stored in the class data array
-
-        return DataStats.median(sarr);
-
-    }
-    
-    public double mean()  { //returns the mean of the data in the parameter array
-
-        return DataStats.sum(sarr) / sarr.length;
-
-    }
-     
-    public double sum() { //returns the sum of the data in the class data array
-
-        return DataStats.sum(sarr);
-
-    }
-    
-    public double sd() {
-        
-        return DataStats.sd(sarr);
+        s = newarr;
+        n++;
         
     }
     
-    public double var() {
-        
-        return DataStats.var(sarr);
-        
-    }
-    
-    public double deviation(double datum) { // returns the deviation of the datum passed from the mean of the class data (array)
-
-        return DataStats.deviation(datum, sarr);
-
-    }
-    
-    public double q1() {
-        
-        return DataStats.q1(sarr);
-        
-    }
-    
-    public double q3() {
-        
-        return DataStats.q3(sarr);
-        
-    }
-    
-    public double iqr(){
-        
-        return DataStats.iqr(sarr);
-        
-    }
-    
-    public double max() {
-        
-        return DataStats.max(sarr);
-        
-    }
-    
-    public double min(){
-        
-        return DataStats.min(sarr);
-        
-    }
-    
-    public double range(){
-        
-        return DataStats.range(sarr);
-        
-    }
-    
-    public double[] highOutliers(){
-        
-        return DataStats.highOutliers(sarr);
-        
-    }
-    
-    public double[] lowOutliers(){
-        
-        return DataStats.lowOutliers(sarr);
-        
-    }
-    
+    /**
+     * Get the sample size
+     * @return the sample size
+     */
     public int n(){
         
-        return s.size();
+        return n;
         
     }
     
+    /**
+     * Get the i-th datum from the sample
+     * @param i the datum's index
+     * @return the datum
+     */
     public double get(int i){
         
-        return s.get(i);
+    	if(i >= n)
+    		throw new ArrayIndexOutOfBoundsException("Attempt to access " + i + "th element of sample of size " + n);
+    	
+        return s[i];
         
     }
     
+    /**
+     * Returns a string representation of the Sample
+     */
     public String toString(){
         
         String ret = "{";
         
-        for(int i = 0; i < this.sarr.length; i++)
-            ret += this.sarr[i] + " ";
+        for(double d : this.s)
+            ret += d + " ";
         
         return ret + "}";
         
