@@ -11,9 +11,9 @@ package statsprog;
  */
 public class OnePropDistribution {
     
-    public double p;	//true proportion
-    public int n;		//sample size
-    public double se;	//stand. error or sd - usually we do not know true sd
+    protected double p;	//true proportion
+    protected int n;		//sample size
+    protected double se;	//stand. error or sd - usually we do not know true sd
     
     /**
      * Create a sampling distribution with sample size n

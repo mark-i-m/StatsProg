@@ -10,8 +10,8 @@ package statsprog;
  */
 public class LinearRegression {
     
-    public Sample x;//x
-    public Sample y;//y      original data or re-expressed data
+    protected Sample x;//x
+    protected Sample y;//y      original data or re-expressed data
     private Sample zx;
     private Sample zy;//zscores
     private Sample e; //residuals

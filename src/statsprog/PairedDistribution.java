@@ -10,10 +10,10 @@ package statsprog;
  */
 public class PairedDistribution {
     
-    public int n;		//number of pairs
-    public double sd;	//sd of mean difference of data
-    public double se;	//se of pop from data
-    public double mean;	//mean diff. of data
+    protected int n;		//number of pairs
+    protected double sd;	//sd of mean difference of data
+    protected double se;	//se of pop from data
+    protected double mean;	//mean diff. of data
     
     /**
      * Creates a sampling distribution from the sample statistics

@@ -10,15 +10,15 @@ package statsprog;
  */
 public class TwoSampleDistribution {
     
-    public int n1;
-    public int n2; 			//sample sizes
-    public double sd1;
-    public double sd2; 		//sd of data samples
-    public double se; 		//se of pop from data
-    public double mean1;
-    public double mean2; 	//mean of data
-    public double df; 		//degrees of freedom - use special formula
-    public double SEp;		//pooled se
+    protected int n1;
+    protected int n2; 			//sample sizes
+    protected double sd1;
+    protected double sd2; 		//sd of data samples
+    protected double se; 		//se of pop from data
+    protected double mean1;
+    protected double mean2; 	//mean of data
+    protected double df; 		//degrees of freedom - use special formula
+    protected double SEp;		//pooled se
     
     /**
      * Creates a distribution from these statistics

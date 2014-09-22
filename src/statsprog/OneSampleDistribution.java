@@ -10,10 +10,10 @@ package statsprog;
  */
 public class OneSampleDistribution {
     
-    public int n;		//sample size
-    public double sd;	//sd of data
-    public double se;	//se of pop from data
-    public double mean;	//mean of data
+    protected int n;		//sample size
+    protected double sd;	//sd of data
+    protected double se;	//se of pop from data
+    protected double mean;	//mean of data
     
     /**
      * Creates a sampling distribution from these sample

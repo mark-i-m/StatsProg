@@ -10,13 +10,13 @@ package statsprog;
  */
 public class TwoPropDistribution {
 
-    public int x1;		//samp prop 1
-    public int x2;		//samp prop 2
-    public int n1;		//samp size 1
-    public int n2;		//samp size 2
-    public double pp;	//p pooled
-    public double SE;	//SE (normal)
-    public double SEp;	//SE pooled
+    protected int x1;		//samp prop 1
+    protected int x2;		//samp prop 2
+    protected int n1;		//samp size 1
+    protected int n2;		//samp size 2
+    protected double pp;	//p pooled
+    protected double SE;	//SE (normal)
+    protected double SEp;	//SE pooled
     
     /**
      * Create a distribution with these parameters

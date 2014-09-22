@@ -10,9 +10,9 @@ package statsprog;
  */
 public class LinearRegressionInferences extends LinearRegression {
 
-    public double SEB0;	//SE of B0
-    public double SEB1; //SE of B1
-    public double s;	//std error of regression
+    private double SEB0;	//SE of B0
+    private double SEB1; //SE of B1
+    private double s;	//std error of regression
     
     /**
      * Create a distribution with these two samples
