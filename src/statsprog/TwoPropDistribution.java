@@ -69,7 +69,7 @@ public class TwoPropDistribution {
     }
     
     /**
-     * Calculate the std error for the two samples/populations
+     * Calculate the std error for the population difference
      * @param p1 the first proportion
      * @param p2 the second proportion
      * @param n1 the first sample/population size
@@ -83,7 +83,7 @@ public class TwoPropDistribution {
     }
     
     /**
-     * Calculate the pooled std error for the two sample/populations
+     * Calculate the pooled std error for the population difference
      * @param pp the pooled proportion
      * @param n1 the first sample size
      * @param n2 the second sample size

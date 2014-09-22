@@ -42,8 +42,8 @@ public class OnePropDistribution {
     }
     
     /**
-     * Calculate the std error / std dev for a distribution
-     * with a mean proportion p and sample size n
+     * Calculate the std error of the population
+     * from sample proportion p and sample size n
      * @param p the mean proportion
      * @param n the sample size
      * @return the std error

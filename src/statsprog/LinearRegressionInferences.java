@@ -1,19 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
  *
  * @author Mark
  */
+
+/**
+ * Represents a linear regression for running tests
+ */
 public class LinearRegressionInferences extends LinearRegression {
 
-    public double SEB0;
-    public double SEB1;
-    public double s;
+    public double SEB0;	//SE of B0
+    public double SEB1; //SE of B1
+    public double s;	//std error of regression
     
+    /**
+     * Create a distribution with these two samples
+     * @param x the first sample
+     * @param y the second sample
+     */
     public LinearRegressionInferences(Sample x, Sample y){
         
         super(x,y);
@@ -24,6 +29,10 @@ public class LinearRegressionInferences extends LinearRegression {
         
     }
     
+    /**
+     * Calculate the std error of regression
+     * @return the std error of regression
+     */
     public double s(){
         
         double s = 0;
@@ -39,15 +48,23 @@ public class LinearRegressionInferences extends LinearRegression {
         
     }
     
+    /**
+     * Calculate the std error of B1
+     * @return the std error of B1 
+     */
     public double SEB1(){
         
-        return s / Math.sqrt(x.n() - 1) / Math.sqrt(x.var() * x.n() / (x.n() - 1));
+        return s / Math.sqrt(x.n() - 1) / Math.sqrt(DataStats.var(x.toArray()) * x.n() / (x.n() - 1));
         
     }
     
+    /**
+     * Calculate the std error of B0
+     * @return the std error of B0
+     */
     public double SEB0(){
         
-        double meanx = x.mean();
+        double meanx = DataStats.mean(x.toArray());
         double n = x.n();
         double seb0 = 0;
         
@@ -62,18 +79,32 @@ public class LinearRegressionInferences extends LinearRegression {
         
     }
     
+    /**
+     * Calculate the t-score of B0 in this regression
+     * @return the t-score
+     */
     public double tscoreB0(){
         
         return getB0() / SEB0;
         
     }
     
+    /**
+     * Calculate the t-score of B1 in this regression
+     * @return the t-score
+     */
     public double tscoreB1(){
         
         return getB1() / SEB1;
         
     }
     
+    /**
+     * Calculate the probability of having a true B0
+     * less than or equal to the calculated B0 in this
+     * regression
+     * @return the probability
+     */
     public double pB0(){
         
         StudentTModel t = new StudentTModel(x.n() - 2);
@@ -84,6 +115,12 @@ public class LinearRegressionInferences extends LinearRegression {
         
     }
     
+    /**
+     * Calculate the probability of having a true B1
+     * less than or equal to the calculated B1 in this
+     * regression
+     * @return the probability
+     */
     public double pB1(){
         
         StudentTModel t = new StudentTModel(x.n() - 2);
@@ -94,29 +131,44 @@ public class LinearRegressionInferences extends LinearRegression {
         
     }
     
-    public double LinRegTTest(double bnaught, int altH){//returns p-value of b1 (slope)
+    /**
+     * Calculate the p-value of running a linear-regression t-test,
+     * with hypothesis bnaught, and alternate hypothesis altH. Here,
+     * we are hypothesizing about the value of B1, which is slope.
+     * @param bnaught the hypothesis
+     * @param altH the alternate hypothesis
+     * @return the p-value
+     */
+    public double LinRegTTest(double bnaught, LinearRegression.AlternateHypothesis altH){
         
         StudentTModel s = new StudentTModel(x.n() - 2);
         
         double t = tscoreB1();
         
         switch(altH){
-            case 0: //p != pnaught
+            case BNOTEQ: //b1 != bnaught
                 return 2 * s.tcdf((t < 0) ? -10 : t, (t < 0) ? t : 10);
                 
-            case 1: //p < pnaught
+            case BLESS: //b1 < bnaught
                 return s.tcdf(-9, t);
                 
-            case 2: //p > pnaught
+            case BGREATER: //b1 > bnaught
                 return s.tcdf(t, 9);
-                
-            default: //impossible; used for coding purposes
-                return 0;
         }
+        
+        throw new IllegalArgumentException("altH invalid");
         
     }
     
-    public double[] LinRegInt(double cl){//returns CI for b1 (slope), cl is a decimal
+    /**
+     * Calculates a confidence interval for the linear regression
+     * with confidence level cl.
+     * @param cl the confidence level
+     * @return the upper and lower bound of the confidence interval
+     * as the first and second elements of a two-element array,
+     * respectively.
+     */
+    public double[] LinRegInt(double cl){
         
         StudentTModel t = new StudentTModel(x.n() - 2);
         double tstar = t.invT(cl + (1.0 - cl) / 2);
@@ -129,6 +181,9 @@ public class LinearRegressionInferences extends LinearRegression {
         
     }
     
+    /**
+     * Returns a string representation of the linear regression
+     */
     public String toString(){
         
         String s = "";

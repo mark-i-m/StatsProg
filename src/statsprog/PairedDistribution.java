@@ -1,21 +1,27 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package statsprog;
 
 /**
  *
  * @author Mark
  */
-public class PairedDistribution { //creates a sampling distribution; all parameters with means are mean differences
+
+/**
+ * Represents a paired-t distribution
+ */
+public class PairedDistribution {
     
-    public int n;//number of pairs
-    public double sd;//sd of mean difference of data
-    public double se;//se of pop from data
-    public double mean;//mean diff. of data
+    public int n;		//number of pairs
+    public double sd;	//sd of mean difference of data
+    public double se;	//se of pop from data
+    public double mean;	//mean diff. of data
     
-    public PairedDistribution(int n, double sd, double xbar){ //creates a sampling distribution from the sample stats passed
+    /**
+     * Creates a sampling distribution from the sample statistics
+     * @param n		number of pairs
+     * @param sd	sd of differences
+     * @param xbar	mean difference
+     */
+    public PairedDistribution(int n, double sd, double xbar){
         
         this.n = n;
         this.sd = sd;
@@ -24,7 +30,12 @@ public class PairedDistribution { //creates a sampling distribution; all paramet
         
     }
     
-    public PairedDistribution(Sample s1, Sample s2){ //creates a sampling distribution from sample
+    /**
+     * Creates a sampling distribution from the samples
+     * @param s1 the first sample
+     * @param s2 the second sample 
+     */
+    public PairedDistribution(Sample s1, Sample s2){
         
         Sample s = new Sample();
         
@@ -32,25 +43,43 @@ public class PairedDistribution { //creates a sampling distribution; all paramet
             s.add(s1.get(i) - s2.get(i));
         
         this.n = s.n();
-        this.sd = Math.sqrt(s.var() * n / (n - 1));
-        this.mean = s.mean();
+        this.sd = Math.sqrt(DataStats.var(s.toArray()) * n / (n - 1));
+        this.mean = DataStats.mean(s.toArray());
         this.se = SE(sd,n);
         
     }
     
-    public static double SE(double sd, int n){//sd = sd of data, n = sample size, returns the pop SE from data
+    /**
+     * Calculate the std error of the differences of the population
+     * for the given sample statistics
+     * @param sd the sample sd
+     * @param n the sample size
+     * @return the std error
+     */
+    public static double SE(double sd, int n){
         
         return sd / Math.sqrt(n);
         
     }
     
-    public double tscore (double xbar){//calculates tscore of xbar
+    /**
+     * Calculate the t-score of xbar in this distribution
+     * @param xbar the datum (a difference)
+     * @return the t-score
+     */
+    public double tscore (double xbar){
         
         return (xbar - mean) / se;
         
     }
     
-    public double tpdf (double xbar){ //calculates the tpdf of xbar in the sampling distribution
+    /**
+     * Calculates the PDF of xbar in this sampling
+     * distribution
+     * @param xbar the datum
+     * @return the PDF
+     */
+    public double tpdf (double xbar){
         
         StudentTModel s = new StudentTModel(n - 1);
         
@@ -58,7 +87,14 @@ public class PairedDistribution { //creates a sampling distribution; all paramet
         
     }
     
-    public double tcdf (double lower, double upper){ //calculates the probability of getting a sample with xbar between upper and lower in the sampling distribution
+    /**
+     * Calculates the probability of a difference being between
+     * lower and upper in this distribution
+     * @param lower the lower bound
+     * @param upper the upper bound
+     * @return the probability
+     */
+    public double tcdf (double lower, double upper){
         
         StudentTModel s = new StudentTModel(n - 1);
         

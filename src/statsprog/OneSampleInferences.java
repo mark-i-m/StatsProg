@@ -68,13 +68,13 @@ public class OneSampleInferences extends OneSampleDistribution {
         double t = (mean - munaught) / se;
         
         switch(altH){
-            case MNOTEQ: //p != pnaught
+            case MNOTEQ: //m != mnaught
                 return 2 * s.tcdf((t < 0) ? -10 : t, (t < 0) ? t : 10);
                 
-            case MLESS: //p < pnaught
+            case MLESS: //m < mnaught
                 return s.tcdf(-9, t);
                 
-            case MGREATER: //p > pnaught
+            case MGREATER: //m > mnaught
                 return s.tcdf(t, 9);
         }
         

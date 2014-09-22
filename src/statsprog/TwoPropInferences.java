@@ -58,7 +58,7 @@ public class TwoPropInferences extends TwoPropDistribution {
     
     /**
      * Calculates a two-proportion z-interval with confidence
-     * level cl, using a pooled proportion. This should be used
+     * level cl, using a pooled std error. This should be used
      * only if the variances are equal.
      * @param cl the confidence level
      * @return the lower and upper bounds of the interval --
@@ -112,7 +112,7 @@ public class TwoPropInferences extends TwoPropDistribution {
     
     /**
      * Calculates the p-value for the hypothesis test,
-     * using pooled proportion.
+     * using pooled std error.
      * @param pnaught the hypothesis
      * @param altH the alternate hypothesis
      * @return the p-value
